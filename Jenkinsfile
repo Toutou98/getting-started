@@ -15,13 +15,6 @@ pipeline {
         }
     }
     stages {
-        stage('Install Git') {
-            steps {
-                container('maven') {
-                    sh 'apt-get update && apt-get install -y git'
-                }
-            }
-        }
         stage('Checkout') {
             steps {
                 // Checkout the code from the repository
@@ -31,7 +24,7 @@ pipeline {
         stage('Build') {
             steps {
                 container('maven') {
-                    sh 'chmod +x mvnw'
+                    sh 'cd getting-started'
                     // Build the Quarkus project using Maven
                     sh './mvnw package -Dquarkus.package.jar.type=uber-jar'
                 }
