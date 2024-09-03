@@ -26,7 +26,9 @@ pipeline {
         stage('Build') {
             steps {
                 container('maven') {
-                    dir('getting-started') {
+                    dir('getting-started') { // Ensure you're in the correct directory
+                        // List files and check permissions
+                        sh 'ls -la'
                         // Set executable permissions for the Maven Wrapper
                         sh 'chmod +x mvnw'
                         // Build the Quarkus project using Maven Wrapper
