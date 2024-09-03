@@ -31,6 +31,7 @@ pipeline {
         stage('Build') {
             steps {
                 container('maven') {
+                    sh 'chmod +x mvnw'
                     // Build the Quarkus project using Maven
                     sh './mvnw package -Dquarkus.package.jar.type=uber-jar'
                 }
