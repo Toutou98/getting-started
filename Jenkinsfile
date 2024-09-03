@@ -28,6 +28,7 @@ pipeline {
                 container('maven') {
                     dir('getting-started') { // Ensure you're in the correct directory
                         // List files and check permissions
+                        sh 'pwd'
                         sh 'ls -la'
                         // Set executable permissions for the Maven Wrapper
                         sh 'chmod +x mvnw'
