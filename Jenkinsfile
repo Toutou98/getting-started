@@ -15,28 +15,18 @@ pipeline {
         }
     }
     stages {
-        stage('Checkout') {
-            steps {
-                container('maven') {
-                    // Checkout the code from the repository
-                    git branch: 'main', url: 'https://github.com/Toutou98/getting-started.git'
-                    sh 'pwd'
-                    
-                }
-            }
-        }
         stage('Build') {
             steps {
                 container('maven') {
-                    dir('/home/jenkins/agent/workspace/getting started pipeline/getting-started') { // Ensure you're in the correct directory
-                        // List files and check permissions
-                        sh 'pwd'
-                        sh 'pwd && ls -la'
-                        // Set executable permissions for the Maven Wrapper
-                        sh 'chmod +x mvnw'
-                        // Build the Quarkus project using Maven Wrapper
-                        sh './mvnw package -Dquarkus.package.jar.type=uber-jar'
-                    }
+                    // List files and check permissions
+                    git branch: 'main', url: 'https://github.com/Toutou98/getting-started.git'
+                    sh 'pwd'
+                    sh 'pwd && ls -la'
+                    // Set executable permissions for the Maven Wrapper
+                    sh 'chmod +x mvnw'
+                    // Build the Quarkus project using Maven Wrapper
+                    sh './mvnw package -Dquarkus.package.jar.type=uber-jar'
+                    
                 }
             }
         }
