@@ -15,10 +15,17 @@ pipeline {
         }
     }
     stages {
+        stage('Install Git') {
+            steps {
+                container('maven') {
+                    sh 'apt-get update && apt-get install -y git'
+                }
+            }
+        }
         stage('Checkout') {
             steps {
                 // Checkout the code from the repository
-                git 'https://github.com/Toutou98/getting-started.git'
+                git branch: 'main', url: 'https://github.com/Toutou98/getting-started.git'
             }
         }
         stage('Build') {
