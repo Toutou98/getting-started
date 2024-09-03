@@ -18,15 +18,18 @@ pipeline {
         stage('Checkout') {
             steps {
                 container('maven') {
-                    // Checkout the code from the repository
-                    git branch: 'main', url: 'https://github.com/Toutou98/getting-started.git'
+                    dir('/'){
+                        // Checkout the code from the repository
+                        git branch: 'main', url: 'https://github.com/Toutou98/getting-started.git'
+                        sh 'pwd'
+                    }
                 }
             }
         }
         stage('Build') {
             steps {
                 container('maven') {
-                    dir('getting-started') { // Ensure you're in the correct directory
+                    dir('/getting-started') { // Ensure you're in the correct directory
                         // List files and check permissions
                         sh 'pwd'
                         sh 'ls -la'
