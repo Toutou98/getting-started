@@ -7,7 +7,7 @@ pipeline {
             spec:
               containers:
               - name: maven
-                image: maven:3.8.7-openjdk-18
+                image: maven:3.9.9-ibm-semeru-21-jammy
                 command:
                 - cat
                 tty: true
