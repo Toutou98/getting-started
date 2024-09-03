@@ -26,9 +26,9 @@ pipeline {
                 container('maven') {
                     dir('getting-started') {
                         // Set executable permissions for the Maven Wrapper
-                        sh 'chmod +x mvnw'
+                        sh 'chmod +x /getting-started/mvnw'
                         // Build the Quarkus project using Maven Wrapper
-                        sh './mvnw package -Dquarkus.package.jar.type=uber-jar'
+                        sh './getting-started/mvnw package -Dquarkus.package.jar.type=uber-jar'
                     }
                 }
             }
