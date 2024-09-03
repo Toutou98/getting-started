@@ -24,12 +24,11 @@ pipeline {
         stage('Build') {
             steps {
                 container('maven') {
-                    dir('getting-started') {
-                        // Set executable permissions for the Maven Wrapper
-                        sh 'chmod +x mvnw'
-                        // Build the Quarkus project using Maven Wrapper
-                        sh './mvnw package'
-                    }
+                    // Set executable permissions for the Maven Wrapper
+                    sh 'chmod +x /getting-started/mvnw'
+                    // Build the Quarkus project using Maven Wrapper
+                    sh './getting-started/mvnw package'
+                    
                 }
             }
         }
