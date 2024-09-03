@@ -17,8 +17,10 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the code from the repository
-                git branch: 'main', url: 'https://github.com/Toutou98/getting-started.git'
+                container('maven') {
+                    // Checkout the code from the repository
+                    git branch: 'main', url: 'https://github.com/Toutou98/getting-started.git'
+                }
             }
         }
         stage('Build') {
@@ -26,8 +28,7 @@ pipeline {
                 container('maven') {
                     dir('getting-started') {
                         // Set executable permissions for the Maven Wrapper
-                        sh 'cd getting-started && chmod +x mvnw'
-                        sh 'ls -la'
+                        sh 'chmod +x mvnw'
                         // Build the Quarkus project using Maven Wrapper
                         sh './mvnw package -Dquarkus.package.jar.type=uber-jar'
                     }
