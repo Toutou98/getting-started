@@ -28,10 +28,10 @@ pipeline {
         stage('Build') {
             steps {
                 container('maven') {
-                    dir('//home/jenkins/agent/workspace/getting started pipeline/getting-started') { // Ensure you're in the correct directory
+                    dir('/home/jenkins/agent/workspace/getting started pipeline/getting-started') { // Ensure you're in the correct directory
                         // List files and check permissions
                         sh 'pwd'
-                        sh 'ls -la'
+                        sh 'pwd && ls -la'
                         // Set executable permissions for the Maven Wrapper
                         sh 'chmod +x mvnw'
                         // Build the Quarkus project using Maven Wrapper
