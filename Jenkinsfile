@@ -25,7 +25,7 @@ pipeline {
                     // Set executable permissions for the Maven Wrapper
                     sh 'chmod +x mvnw'
                     // Build the Quarkus project using Maven Wrapper
-                    sh './mvnw package -Dquarkus.package.jar.type=uber-jar'
+                    sh 'mvn package -Dquarkus.package.jar.type=uber-jar'
                     
                 }
             }
