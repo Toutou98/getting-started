@@ -37,13 +37,10 @@ pipeline {
         stage('Build') {
             steps {
                 container('maven') {
-                    sh 'chmod +x mvnw'
-                    sh './mvnw package -Dquarkus.package.jar.type=uber-jar'
+                    sh 'mvn package -Dquarkus.package.jar.type=uber-jar'
                     sh 'pwd'
                     sh 'ls -la'
                     sh 'ls -la target/'
-                    sh 'ls -la target/quarkus-app'
-                    sh 'ls -la target/quarkus-app/quarkus'
                 }
             }
         }
@@ -52,7 +49,7 @@ pipeline {
                 container('docker') {
                     script {
                         // Build the Docker image using your specific Dockerfile (Dockerfile.jvm)
-                        sh 'docker build -f src/main/docker/Dockerfile.jvm -t getting-started:1.0 .'
+                        sh 'docker build -f src/main/docker/Dockerfile.toutou -t getting-started:1.0 .'
                     }
                 }
             }
