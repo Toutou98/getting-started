@@ -39,6 +39,7 @@ pipeline {
                 container('maven') {
                     sh 'mvn package -Dquarkus.package.jar.type=uber-jar'
                     sh 'pwd'
+                    sh 'ls -la'
                     sh 'ls -la getting-started/target/quarkus-app'
                     sh 'ls -la getting-started/target/quarkus-app/quarkus'
                 }
