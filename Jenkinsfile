@@ -6,6 +6,11 @@ pipeline {
             kind: Pod
             spec:
               containers:
+              - name: maven
+                image: maven:3.9.9-ibm-semeru-21-jammy
+                command:
+                - cat
+                tty: true
               - name: docker
                 image: docker:24.0.2
                 command:
@@ -24,12 +29,18 @@ pipeline {
     stages {
         stage('Clone') {
             steps {
-                container('docker') {
+                container('maven') {
                     git branch: 'main', url: 'https://github.com/Toutou98/getting-started.git'
                 }
             }
         }
-        
+        stage('Build') {
+            steps {
+                container('maven') {
+                    sh 'mvn package -Dquarkus.package.jar.type=uber-jar'
+                }
+            }
+        }
         stage('Build Docker Image') {
             steps {
                 container('docker') {
@@ -40,13 +51,6 @@ pipeline {
                 }
             }
         }
-        // stage('Build') {
-        //     steps {
-        //         container('maven') {
-        //             sh 'mvn package -Dquarkus.package.jar.type=uber-jar'
-        //         }
-        //     }
-        // }
         // stage('Archive') {
         //     steps {
         //         container('maven') {
