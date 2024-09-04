@@ -37,7 +37,8 @@ pipeline {
         stage('Build') {
             steps {
                 container('maven') {
-                    sh 'mvn package -Dquarkus.package.jar.type=uber-jar'
+                    sh 'chmod +x mvnw'
+                    sh './mvnw package -Dquarkus.package.jar.type=uber-jar'
                     sh 'pwd'
                     sh 'ls -la'
                     sh 'ls -la target/'
