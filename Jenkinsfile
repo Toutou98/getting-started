@@ -15,16 +15,16 @@ pipeline {
         }
     }
     stages {
+        stagea('Clone') {
+            steps {
+                container('maven') {
+                    git branch: 'main', url: 'https://github.com/Toutou98/getting-started.git'
+                }
+            }
+        }
         stage('Build') {
             steps {
                 container('maven') {
-                    // List files and check permissions
-                    git branch: 'main', url: 'https://github.com/Toutou98/getting-started.git'
-                    sh 'pwd'
-                    sh 'pwd && ls -la'
-                    // Set executable permissions for the Maven Wrapper
-                    sh 'chmod +x mvnw'
-                    // Build the Quarkus project using Maven Wrapper
                     sh 'mvn package -Dquarkus.package.jar.type=uber-jar'
                     
                 }
@@ -32,8 +32,10 @@ pipeline {
         }
         stage('Archive') {
             steps {
-                // Archive the JAR file
-                archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true
+                container('maven') {
+                    archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true
+           
+                }
             }
         }
     }
