@@ -15,7 +15,7 @@ pipeline {
         }
     }
     stages {
-        stagea('Clone') {
+        stage('Clone') {
             steps {
                 container('maven') {
                     git branch: 'main', url: 'https://github.com/Toutou98/getting-started.git'
