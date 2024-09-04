@@ -5,4 +5,5 @@ ENV LANGUAGE='en_US:en'
 COPY --chown=185 target/*.jar /deployments/
 
 EXPOSE 8080
+USER 185
 
