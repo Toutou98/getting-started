@@ -25,8 +25,9 @@ pipeline {
         stage('Build') {
             steps {
                 container('maven') {
-                    sh 'mvn package -Dquarkus.package.jar.type=uber-jar'
-                    
+                    catchError {
+                        sh 'mvn package -Dquarkus.package.jar.type=uber-jar'
+                    }                    
                 }
             }
         }
