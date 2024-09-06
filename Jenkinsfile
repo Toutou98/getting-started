@@ -12,20 +12,15 @@ pipeline {
                 - cat
                 tty: true
               - name: docker
-                image: docker:24.0.2
-                command:
-                - dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --insecure-registry host.docker.internal:8081
+                image: docker:24.0.2-dind
                 env:
                 - name: DOCKER_TLS_CERTDIR
-                  value: ""
-                - name: DOCKER_OPTS
-                  value: "--insecure-registry host.docker.internal:8081"
-                tty: true
+                    value: ""
                 securityContext:
                     privileged: true
                 volumeMounts:
                 - name: docker-socket
-                  mountPath: /var/run/docker.sock
+                    mountPath: /var/run/docker.sock
               - name: helm
                 image: alpine/helm:3.12.0
                 command:
