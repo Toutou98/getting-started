@@ -14,8 +14,15 @@ pipeline {
               - name: docker
                 image: docker:24.0.2
                 command:
-                - cat
+                - dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --insecure-registry host.docker.internal:8081
+                env:
+                - name: DOCKER_TLS_CERTDIR
+                value: ""
+                - name: DOCKER_OPTS
+                value: "--insecure-registry host.docker.internal:8081"
                 tty: true
+                securityContext:
+                    privileged: true
                 volumeMounts:
                 - name: docker-socket
                   mountPath: /var/run/docker.sock
