@@ -44,6 +44,12 @@ pipeline {
         NEXUS_PASSWORD = credentials('hello')
     }
     stages {
+        stage('Debug Info') {
+            steps {
+                echo "Pod created successfully."
+                echo "Checking if checkout was successful."
+            }
+        }
         stage('Clone') {
             steps {
                 container('maven') {
