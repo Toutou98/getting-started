@@ -90,7 +90,6 @@ pipeline {
                             echo "Pushing Helm chart to Nexus"
                             echo "NEXUS_URL: ${NEXUS_URL}"
                             echo "NEXUS_USERNAME: ${NEXUS_USERNAME}"
-                            sh 'curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD --upload-file quarkus-app-*.tgz http://host.docker.internal:8081/repository/helm-local/'
                         }
                     }
                 }
