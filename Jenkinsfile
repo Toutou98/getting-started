@@ -12,7 +12,7 @@ pipeline {
                 - cat
                 tty: true
               - name: docker
-                image: docker:24.0.2
+                image: docker:24.0.2-dind
                 command:
                 - cat
                 tty: true
