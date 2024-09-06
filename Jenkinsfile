@@ -35,6 +35,10 @@ pipeline {
             steps {
                 echo "Pod created successfully."
                 echo "Checking if checkout was successful."
+                withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
+                    echo "NEXUS_USERNAME: ${NEXUS_USERNAME}"
+                    // Avoid printing passwords in real use cases, this is just for demonstration
+                    echo "NEXUS_PASSWORD: ${NEXUS_PASSWORD}"
             }
         }
         stage('Clone') {
