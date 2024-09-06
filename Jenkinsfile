@@ -26,6 +26,12 @@ pipeline {
             """
         }
     }
+    environment {
+        NEXUS_URL = "http://localhost:8081/repository/helm-local/"
+        NEXUS_REPO = "helm-local"
+        NEXUS_USERNAME = credentials('nexus-username')
+        NEXUS_PASSWORD = credentials('nexus-password')
+    }
     stages {
         stage('Debug Info') {
             steps {
