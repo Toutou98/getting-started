@@ -62,14 +62,15 @@ pipeline {
                         // Build the Docker image using your specific Dockerfile (Dockerfile.jvm)
                         sh "docker build -f src/main/docker/Dockerfile.toutou -t ${DOCKER_IMAGE} ."
                         // Authenticate with Nexus Docker registry
-                        withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
-                            sh "echo $NEXUS_PASSWORD | docker login ${DOCKER_REGISTRY} -u $NEXUS_USERNAME --password-stdin"
-                            // Tag the image for Nexus repository
-                            sh "docker tag ${DOCKER_IMAGE} ${DOCKER_REGISTRY}/getting-started:1.0"
-                            // Push the Docker image to Nexus
-                            sh "docker push ${DOCKER_REGISTRY}/getting-started:1.0"
-                        }
+                        withEnv(["DOCKER_OPTS=--insecure-registry host.docker.internal:8081"]) {
+                            withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
+                                sh 'pwd'
+                                sh "echo $NEXUS_PASSWORD | docker login ${DOCKER_REGISTRY} -u $NEXUS_USERNAME --password-stdin"
+                                sh "docker tag ${DOCKER_IMAGE} ${DOCKER_REGISTRY}${DOCKER_IMAGE}"
+                                sh "docker push ${DOCKER_REGISTRY}${DOCKER_IMAGE}"
+                            }
                         
+                        }
                     }
                 }
             }
