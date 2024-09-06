@@ -15,9 +15,10 @@ pipeline {
                 image: docker:24.0.2-dind
                 securityContext:
                     privileged: true
+                tty: true
                 volumeMounts:
                 - name: docker-socket
-                    mountPath: /var/run/docker.sock
+                  mountPath: /var/run/docker.sock
               - name: helm
                 image: alpine/helm:3.12.0
                 command:
@@ -44,31 +45,32 @@ pipeline {
                 }
             }
         }
-        // stage('Build') {
-        //     steps {
-        //         container('maven') {
-        //             sh 'mvn package -Dquarkus.package.jar.type=uber-jar'
-        //             sh 'pwd'
-        //             sh 'ls -la'
-        //             sh 'ls -la target/'
-        //         }
-        //     }
-        // }
+        stage('Build') {
+            steps {
+                container('maven') {
+                    sh 'mvn package -Dquarkus.package.jar.type=uber-jar'
+                    sh 'pwd'
+                    sh 'ls -la'
+                    sh 'ls -la target/'
+                }
+            }
+        }
         stage('Build Docker Image') {
             steps {
                 container('docker') {
                     script {
                         // Build the Docker image using your specific Dockerfile (Dockerfile.jvm)
-                        //sh "docker build -f src/main/docker/Dockerfile.toutou -t ${DOCKER_IMAGE} ."
+                        sh "docker build -f src/main/docker/Dockerfile.toutou -t ${DOCKER_IMAGE} ."
                         // Authenticate with Nexus Docker registry
-                        withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
-                            sh 'pwd'
-                            sh "echo $NEXUS_PASSWORD | docker login ${DOCKER_REGISTRY} -u $NEXUS_USERNAME --password-stdin"
-                            //sh "docker tag ${DOCKER_IMAGE} ${DOCKER_REGISTRY}${DOCKER_IMAGE}"
-                            //sh "docker push ${DOCKER_REGISTRY}${DOCKER_IMAGE}"
+                        withEnv(["DOCKER_OPTS=--insecure-registry host.docker.internal:8081"]) {
+                            withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
+                                sh 'pwd'
+                                sh "echo $NEXUS_PASSWORD | docker login ${DOCKER_REGISTRY} -u $NEXUS_USERNAME --password-stdin"
+                                sh "docker tag ${DOCKER_IMAGE} ${DOCKER_REGISTRY}${DOCKER_IMAGE}"
+                                sh "docker push ${DOCKER_REGISTRY}${DOCKER_IMAGE}"
+                            }
+                        
                         }
-                        
-                        
                     }
                 }
             }
