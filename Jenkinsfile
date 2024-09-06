@@ -24,11 +24,6 @@ pipeline {
                 command:
                 - cat
                 tty: true
-              - name: curl
-                image: curlimages/curl:7.85.0
-                command:
-                - cat
-                tty: true
               volumes:
               - name: docker-socket
                 hostPath:
@@ -74,25 +69,16 @@ pipeline {
                     script {
                         // Package the Helm chart from the existing directory
                         sh 'helm package quarkus-app'
-                    }
-                }
-            }
-        }
-        stage('Push Helm Chart to Nexus') {
-            steps {
-                container('curl') {
-                    script {
-                        sh 'pwd'
-                        sh 'ls -la'
                         // Push the Helm chart to Nexus using curl
-                        // withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) 
-                        // {
-                        //     sh 'pwd'
-                        //     sh 'ls -la'
-                        //     echo "Pushing Helm chart to Nexus"
-                        //     echo "NEXUS_URL: ${NEXUS_URL}"
-                        //     echo "NEXUS_USERNAME: ${NEXUS_USERNAME}"
-                        // }
+                        withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) 
+                        {
+                            sh 'pwd'
+                            sh 'ls -la'
+                            echo "Pushing Helm chart to Nexus"
+                            echo "NEXUS_URL: ${NEXUS_URL}"
+                            echo "NEXUS_USERNAME: ${NEXUS_USERNAME}"
+                            sh 'curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD --upload-file quarkus-app-*.tgz http://host.docker.internal:8081/repository/helm-local/'
+                        }
                     }
                 }
             }
