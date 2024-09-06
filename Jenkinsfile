@@ -15,7 +15,8 @@ pipeline {
                 image: docker:24.0.2-dind
                 command:
                 - cat
-                tty: true
+                securityContext:
+                    privileged: true
                 volumeMounts:
                 - name: docker-socket
                   mountPath: /var/run/docker.sock
