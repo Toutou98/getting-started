@@ -84,7 +84,7 @@ pipeline {
                 container('helm') {
                     script {
                         // Package the Helm chart from the existing directory
-                        sh 'helm package path/to/your/helm/chart/directory'
+                        sh 'helm package quarkus-app'
                     }
                 }
             }
