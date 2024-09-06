@@ -13,9 +13,6 @@ pipeline {
                 tty: true
               - name: docker
                 image: docker:24.0.2-dind
-                env:
-                - name: DOCKER_TLS_CERTDIR
-                    value: ""
                 securityContext:
                     privileged: true
                 volumeMounts:
