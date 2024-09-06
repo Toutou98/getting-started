@@ -39,6 +39,7 @@ pipeline {
                     echo "NEXUS_USERNAME: ${NEXUS_USERNAME}"
                     // Avoid printing passwords in real use cases, this is just for demonstration
                     echo "NEXUS_PASSWORD: ${NEXUS_PASSWORD}"
+                }
             }
         }
         stage('Clone') {
@@ -78,9 +79,8 @@ pipeline {
         // }
     }
     post {
-    always {
-        cleanWs()
+        always {
+            cleanWs()
+        }
     }
-}
-
 }
