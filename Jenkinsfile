@@ -19,6 +19,16 @@ pipeline {
                 volumeMounts:
                 - name: docker-socket
                   mountPath: /var/run/docker.sock
+              - name: helm
+                image: alpine/helm:3.12.0
+                command:
+                - cat
+                tty: true
+              - name: curl
+                image: curlimages/curl:7.85.0
+                command:
+                - cat
+                tty: true
               volumes:
               - name: docker-socket
                 hostPath:
@@ -65,6 +75,26 @@ pipeline {
                     script {
                         // Build the Docker image using your specific Dockerfile (Dockerfile.jvm)
                         sh 'docker build -f src/main/docker/Dockerfile.toutou -t getting-started:1.0 .'
+                    }
+                }
+            }
+        }
+        stage('Package Helm Chart') {
+            steps {
+                container('helm') {
+                    script {
+                        // Package the Helm chart from the existing directory
+                        sh 'helm package path/to/your/helm/chart/directory'
+                    }
+                }
+            }
+        }
+        stage('Push Helm Chart to Nexus') {
+            steps {
+                container('curl') {
+                    script {
+                        // Push the Helm chart to Nexus using curl
+                        sh 'curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD --upload-file quarkus-app-*.tgz $NEXUS_URL'
                     }
                 }
             }
