@@ -19,12 +19,29 @@ pipeline {
                 volumeMounts:
                 - name: docker-socket
                   mountPath: /var/run/docker.sock
+              - name: helm
+                image: alpine/helm:3.10.3
+                command:
+                - cat
+                tty: true
+              - name: curl
+                image: curlimages/curl:7.85.0
+                command:
+                - cat
+                tty: true
               volumes:
               - name: docker-socket
                 hostPath:
                   path: /var/run/docker.sock
             """
         }
+    }
+    environment {
+        // Define environment variables for Nexus repository URL and credentials
+        NEXUS_URL = "http://localhost:8081/repository/helm-local/"
+        NEXUS_REPO = "helm-local"
+        NEXUS_USERNAME = credentials('admin')
+        NEXUS_PASSWORD = credentials('hello')
     }
     stages {
         stage('Clone') {
@@ -50,6 +67,27 @@ pipeline {
                     script {
                         // Build the Docker image using your specific Dockerfile (Dockerfile.jvm)
                         sh 'docker build -f src/main/docker/Dockerfile.toutou -t getting-started:1.0 .'
+                    }
+                }
+            }
+        }
+        stage('Package Helm Chart') {
+            steps {
+                container('helm') {
+                    script {
+                        sh 'helm package quarkus-app'
+
+                    }
+                }
+            }
+        }
+        stage('Push Helm Chart to Nexus') {
+            steps {
+                container('curl') {
+                    script {
+                        sh '
+                        curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD --upload-file quarkus-app-*.tgz $NEXUS_URL
+                        '
                     }
                 }
             }
