@@ -41,17 +41,6 @@ pipeline {
         NEXUS_REPO = "helm-local"
     }
     stages {
-        stage('Debug Info') {
-            steps {
-                echo "Pod created successfully."
-                echo "Checking if checkout was successful."
-                withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
-                    echo "NEXUS_USERNAME: ${NEXUS_USERNAME}"
-                    // Avoid printing passwords in real use cases, this is just for demonstration
-                    echo "NEXUS_PASSWORD: ${NEXUS_PASSWORD}"
-                }
-            }
-        }
         stage('Clone') {
             steps {
                 container('maven') {
@@ -94,7 +83,10 @@ pipeline {
                 container('curl') {
                     script {
                         // Push the Helm chart to Nexus using curl
-                        sh 'curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD --upload-file quarkus-app-*.tgz $NEXUS_URL'
+                        withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) 
+                        {
+                            sh 'curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD --upload-file quarkus-app-*.tgz $NEXUS_URL'
+                        }
                     }
                 }
             }
