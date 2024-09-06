@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: http://localhost:8081/repository/docker-local/getting-started-quarkus
+  repository: http://localhost:8081/repository/docker-local/getting-started
   tag: "1.0"
   pullPolicy: IfNotPresent
 
