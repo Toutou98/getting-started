@@ -45,5 +45,4 @@ nb-configuration.xml
 .certs/
 
 # helm chart
-quarkus-app/
-quarkus-app*
+quarkus-app-*
