@@ -35,7 +35,7 @@ pipeline {
         NEXUS_URL = "http://host.docker.internal:8081/repository/helm-local/"
         NEXUS_REPO = "helm-local"
         DOCKER_REGISTRY = "http://host.docker.internal:8081/repository/docker-local/"
-        DOCKER_IMAGE = getting-started:1.0.0
+        DOCKER_IMAGE = "getting-started:1.0.0"
     }
     stages {
         stage('Clone') {
