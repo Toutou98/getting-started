@@ -85,9 +85,7 @@ pipeline {
             steps {
                 container('curl') {
                     script {
-                        sh '
-                        curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD --upload-file quarkus-app-*.tgz $NEXUS_URL
-                        '
+                        sh 'curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD --upload-file quarkus-app-*.tgz $NEXUS_URL'
                     }
                 }
             }
