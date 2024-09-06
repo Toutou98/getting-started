@@ -20,12 +20,12 @@ pipeline {
                 - name: docker-socket
                   mountPath: /var/run/docker.sock
               - name: helm
-                image: alpine/helm:3.10.3
+                image: alpine/helm:3.15
                 command:
                 - cat
                 tty: true
               - name: curl
-                image: curlimages/curl:7.85.0
+                image: curlimages/curl:8.9.1
                 command:
                 - cat
                 tty: true
