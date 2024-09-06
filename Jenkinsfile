@@ -100,9 +100,11 @@ pipeline {
         // }
     }
     post {
-        always {
-            // Clean up workspace
+    always {
+        container('maven') {
             cleanWs()
         }
     }
+}
+
 }
