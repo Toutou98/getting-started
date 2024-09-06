@@ -13,8 +13,6 @@ pipeline {
                 tty: true
               - name: docker
                 image: docker:24.0.2
-                securityContext:
-                    privileged: true
                 tty: true
                 volumeMounts:
                 - name: docker-socket
