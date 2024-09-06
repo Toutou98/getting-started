@@ -82,15 +82,17 @@ pipeline {
             steps {
                 container('curl') {
                     script {
+                        sh 'pwd'
+                        sh 'ls -la'
                         // Push the Helm chart to Nexus using curl
-                        withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) 
-                        {
-                            sh 'pwd'
-                            sh 'ls -la'
-                            echo "Pushing Helm chart to Nexus"
-                            echo "NEXUS_URL: ${NEXUS_URL}"
-                            echo "NEXUS_USERNAME: ${NEXUS_USERNAME}"
-                        }
+                        // withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) 
+                        // {
+                        //     sh 'pwd'
+                        //     sh 'ls -la'
+                        //     echo "Pushing Helm chart to Nexus"
+                        //     echo "NEXUS_URL: ${NEXUS_URL}"
+                        //     echo "NEXUS_USERNAME: ${NEXUS_USERNAME}"
+                        // }
                     }
                 }
             }
