@@ -17,9 +17,9 @@ pipeline {
                 - dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --insecure-registry host.docker.internal:8081
                 env:
                 - name: DOCKER_TLS_CERTDIR
-                value: ""
+                  value: ""
                 - name: DOCKER_OPTS
-                value: "--insecure-registry host.docker.internal:8081"
+                  value: "--insecure-registry host.docker.internal:8081"
                 tty: true
                 securityContext:
                     privileged: true
