@@ -19,29 +19,12 @@ pipeline {
                 volumeMounts:
                 - name: docker-socket
                   mountPath: /var/run/docker.sock
-              - name: helm
-                image: alpine/helm:3.15
-                command:
-                - cat
-                tty: true
-              - name: curl
-                image: curlimages/curl:8.9.1
-                command:
-                - cat
-                tty: true
               volumes:
               - name: docker-socket
                 hostPath:
                   path: /var/run/docker.sock
             """
         }
-    }
-    environment {
-        // Define environment variables for Nexus repository URL and credentials
-        NEXUS_URL = "http://localhost:8081/repository/helm-local/"
-        NEXUS_REPO = "helm-local"
-        NEXUS_USERNAME = credentials('admin')
-        NEXUS_PASSWORD = credentials('hello')
     }
     stages {
         stage('Debug Info') {
@@ -77,25 +60,6 @@ pipeline {
                 }
             }
         }
-        stage('Package Helm Chart') {
-            steps {
-                container('helm') {
-                    script {
-                        sh 'helm package quarkus-app'
-
-                    }
-                }
-            }
-        }
-        stage('Push Helm Chart to Nexus') {
-            steps {
-                container('curl') {
-                    script {
-                        sh 'curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD --upload-file quarkus-app-*.tgz $NEXUS_URL'
-                    }
-                }
-            }
-        }
         // stage('Archive') {
         //     steps {
         //         container('maven') {
@@ -107,9 +71,7 @@ pipeline {
     }
     post {
     always {
-        container('maven') {
-            cleanWs()
-        }
+        cleanWs()
     }
 }
 
