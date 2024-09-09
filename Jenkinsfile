@@ -16,7 +16,7 @@ pipeline {
                 command:
                 - dockerd
                 - --host=unix:///var/run/docker.sock
-                - --insecure-registry=host.docker.internal:8082
+                - --insecure-registry=host.docker.internal:8083
                 securityContext:
                   privileged: true
               - name: helm
@@ -28,8 +28,7 @@ pipeline {
         }
     }
     environment {
-        NEXUS_URL = "http://host.docker.internal:8082/repository/helm-local-repo/"
-        NEXUS_REPO = "helm-local"
+        HELM_URL = "http://host.docker.internal:8082/repository/helm-local-repo/"
         DOCKER_REGISTRY = "http://host.docker.internal:8082/repository/docker-local-registry/"
         DOCKER_IMAGE = "getting-started:1.0.0"
     }
@@ -53,7 +52,7 @@ pipeline {
                         // Push the Helm chart to Nexus using curl
                         withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) 
                         {
-                            sh 'curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD --upload-file quarkus-app-*.tgz $NEXUS_URL'
+                            sh 'curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD --upload-file quarkus-app-*.tgz $HELM_URL'
                         }
                     }
                 }
@@ -66,7 +65,7 @@ pipeline {
                         // Build the Docker image using your specific Dockerfile (Dockerfile.jvm)
                         sh "docker build -f src/main/docker/Dockerfile.toutou -t ${DOCKER_IMAGE} ."
                         // Authenticate with Nexus Docker registry
-                        withEnv(["DOCKER_OPTS=--insecure-registry host.docker.internal:8082"]) {
+                        withEnv(["DOCKER_OPTS=--insecure-registry host.docker.internal:8083"]) {
                             withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
                                 sh 'pwd'
                                 sh "echo $NEXUS_PASSWORD | docker login ${DOCKER_REGISTRY} -u $NEXUS_USERNAME --password-stdin"
