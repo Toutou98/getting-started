@@ -42,13 +42,6 @@ pipeline {
         DOCKER_IMAGE = "getting-started:1.0.0"
     }
     stages {
-        stage('Clone') {
-            steps {
-                container('maven') {
-                    git branch: 'main', url: 'https://github.com/Toutou98/getting-started.git'
-                }
-            }
-        }
         stage('Build') {
             steps {
                 container('maven') {
