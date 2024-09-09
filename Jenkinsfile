@@ -59,7 +59,41 @@ pipeline {
                 }
             }
         }
-
+        stage('Build Docker Image') {
+            steps {
+                container('docker') {
+                    script {
+                        // Build the Docker image using your specific Dockerfile (Dockerfile.jvm)
+                        sh "docker build -f src/main/docker/Dockerfile.toutou -t ${DOCKER_IMAGE} ."
+                        // Authenticate with Nexus Docker registry
+                        withEnv(["DOCKER_OPTS=--insecure-registry host.docker.internal:8082"]) {
+                            withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
+                                sh 'pwd'
+                                sh "echo $NEXUS_PASSWORD | docker login ${DOCKER_REGISTRY} -u $NEXUS_USERNAME --password-stdin"
+                                sh "docker tag ${DOCKER_IMAGE} ${DOCKER_REGISTRY}${DOCKER_IMAGE}"
+                                sh "docker push ${DOCKER_REGISTRY}${DOCKER_IMAGE}"
+                            }
+                        
+                        }
+                    }
+                }
+            }
+        }
+        stage('Package Helm Chart') {
+            steps {
+                container('helm') {
+                    script {
+                        // Package the Helm chart from the existing directory
+                        sh 'helm package quarkus-app'
+                        // Push the Helm chart to Nexus using curl
+                        withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) 
+                        {
+                            sh 'curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD --upload-file quarkus-app-*.tgz $NEXUS_URL'
+                        }
+                    }
+                }
+            }
+        }
     }
     post {
         always {
