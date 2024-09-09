@@ -28,7 +28,7 @@ pipeline {
         }
     }
     environment {
-        HELM_URL = "http://host.docker.internal:8082/repository/helm-local-repo/"
+        HELM_URL = "http://localhost:8082/repository/helm-local-repo/"
         DOCKER_REGISTRY = "http://host.docker.internal:8082/repository/docker-local-registry/"
         DOCKER_IMAGE = "getting-started:1.0.0"
     }
