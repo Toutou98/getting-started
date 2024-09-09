@@ -20,7 +20,7 @@ pipeline {
                 securityContext:
                   privileged: true
               - name: helm
-                image: alpine/helm:3.12.0
+                image: alpine/helm:3.15.4
                 command:
                 - cat
                 tty: true
@@ -28,7 +28,7 @@ pipeline {
         }
     }
     environment {
-        HELM_URL = "http://localhost:8082/repository/helm-local-repo/"
+        HELM_URL = "http://host.docker.internal:8082/repository/helm-local-repo/"
         DOCKER_REGISTRY = "http://host.docker.internal:8082/repository/docker-local-registry/"
         DOCKER_IMAGE = "getting-started:1.0.0"
     }
