@@ -13,6 +13,11 @@ pipeline {
                 tty: true
               - name: docker
                 image: docker:24.0.2-dind
+                command:
+                - dockerd
+                - --host=unix:///var/run/docker.sock
+                - --host=tcp://0.0.0.0:2375
+                - --insecure-registry=host.docker.internal:8081
                 securityContext:
                   privileged: true
                 volumeMounts:
@@ -30,7 +35,12 @@ pipeline {
             """
         }
     }
-
+    environment {
+        NEXUS_URL = "http://host.docker.internal:8081/repository/helm-local/"
+        NEXUS_REPO = "helm-local"
+        DOCKER_REGISTRY = "http://host.docker.internal:8081/repository/docker-local/"
+        DOCKER_IMAGE = "getting-started:1.0.0"
+    }
     stages {
         stage('Clone') {
             steps {
