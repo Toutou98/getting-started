@@ -44,6 +44,21 @@ pipeline {
                 }
             }
         }
+        stage('Package Helm Chart') {
+            steps {
+                container('helm') {
+                    script {
+                        // Package the Helm chart from the existing directory
+                        sh 'helm package quarkus-app'
+                        // Push the Helm chart to Nexus using curl
+                        withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) 
+                        {
+                            sh 'curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD --upload-file quarkus-app-*.tgz $NEXUS_URL'
+                        }
+                    }
+                }
+            }
+        }
         stage('Build Docker Image') {
             steps {
                 container('docker') {
@@ -59,21 +74,6 @@ pipeline {
                                 sh "docker push ${DOCKER_REGISTRY}${DOCKER_IMAGE}"
                             }
                         
-                        }
-                    }
-                }
-            }
-        }
-        stage('Package Helm Chart') {
-            steps {
-                container('helm') {
-                    script {
-                        // Package the Helm chart from the existing directory
-                        sh 'helm package quarkus-app'
-                        // Push the Helm chart to Nexus using curl
-                        withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) 
-                        {
-                            sh 'curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD --upload-file quarkus-app-*.tgz $NEXUS_URL'
                         }
                     }
                 }
