@@ -13,10 +13,6 @@ pipeline {
                 tty: true
               - name: docker
                 image: docker:24.0.2-dind
-                command:
-                - dockerd
-                - --host=unix:///var/run/docker.sock
-                - --insecure-registry=host.docker.internal:8082
                 securityContext:
                   privileged: true
                 volumeMounts:
