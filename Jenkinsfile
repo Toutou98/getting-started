@@ -12,7 +12,7 @@ pipeline {
                 - cat
                 tty: true
               - name: docker
-                image: docker:24.0.2-dind
+                image: docker:27.0.2-dind
                 securityContext:
                   privileged: true
                 volumeMounts:
@@ -32,7 +32,6 @@ pipeline {
     }
     environment {
         NEXUS_URL = "http://host.docker.internal:8082/repository/helm-local-repo/"
-        NEXUS_REPO = "helm-local"
         DOCKER_REGISTRY = "http://host.docker.internal:8082/repository/docker-local-registry/"
         DOCKER_IMAGE = "getting-started:1.0.0"
     }
