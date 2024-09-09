@@ -15,11 +15,6 @@ pipeline {
                 image: docker:24.0.2-dind
                 securityContext:
                   privileged: true
-                command:
-                - dockerd
-                - --host=unix:///var/run/docker.sock
-                - --host=tcp://0.0.0.0:2375
-                - --insecure-registry=host.docker.internal:8081
                 volumeMounts:
                 - name: docker-socket
                   mountPath: /var/run/docker.sock
