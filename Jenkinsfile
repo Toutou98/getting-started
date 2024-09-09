@@ -16,7 +16,9 @@ pipeline {
                 securityContext:
                   privileged: true
                 command:
-                - cat
+                - dockerd
+                - --host=unix:///var/run/docker.sock
+                - --host=tcp://0.0.0.0:2375
                 volumeMounts:
                 - name: docker-socket
                   mountPath: /var/run/docker.sock
