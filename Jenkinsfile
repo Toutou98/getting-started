@@ -17,7 +17,7 @@ pipeline {
                 - dockerd
                 - --host=unix:///var/run/docker.sock
                 - --host=tcp://0.0.0.0:2375
-                - --insecure-registry=host.docker.internal:8081
+                - --insecure-registry=host.docker.internal:8082
                 securityContext:
                   privileged: true
                 volumeMounts:
