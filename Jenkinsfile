@@ -13,6 +13,8 @@ pipeline {
                 tty: true
               - name: docker
                 image: docker:24.0.2-dind
+                securityContext:
+                  privileged: true
                 command:
                 - cat
                 volumeMounts:
