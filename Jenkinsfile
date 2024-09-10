@@ -30,7 +30,7 @@ pipeline {
     environment {
         HELM_URL = "http://my-nexus-nexus-repository-manager.nexus:8081/repository/helm-local-repo/"
         DOCKER_REGISTRY = "http://nexus-docker.nexus.svc.cluster.local:8083"
-        DOCKER_REGISTRY_NAME = "docker-local-registry/"
+        DOCKER_REGISTRY_DOMAIN = "nexus-docker.nexus.svc.cluster.local:8083"
         DOCKER_IMAGE = "getting-started:1.0.0"
     }
     stages {
@@ -66,8 +66,8 @@ pipeline {
                         withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
                             sh 'pwd'
                             sh "echo $NEXUS_PASSWORD | docker login ${DOCKER_REGISTRY} -u $NEXUS_USERNAME --password-stdin"
-                            sh "docker tag ${DOCKER_IMAGE} ${DOCKER_REGISTRY_NAME}${DOCKER_IMAGE}"
-                            sh "docker push ${DOCKER_REGISTRY_NAME}${DOCKER_IMAGE}"
+                            sh "docker tag ${DOCKER_IMAGE} ${DOCKER_REGISTRY_DOMAIN}/${DOCKER_IMAGE}"
+                            sh "docker push ${DOCKER_REGISTRY_DOMAIN}/${DOCKER_IMAGE}"
                         }
                     }
                 }
