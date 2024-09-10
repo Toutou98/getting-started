@@ -16,7 +16,7 @@ pipeline {
                 command:
                 - dockerd
                 - --host=unix:///var/run/docker.sock
-                - --insecure-registry=host.docker.internal:8083
+                - --insecure-registry=nexus-docker.nexus.svc.cluster.local:8083
                 securityContext:
                   privileged: true
               - name: helm
@@ -29,7 +29,8 @@ pipeline {
     }
     environment {
         HELM_URL = "http://my-nexus-nexus-repository-manager.nexus:8081/repository/helm-local-repo/"
-        DOCKER_REGISTRY = "http://nexus-docker.nexus:8083"
+        DOCKER_REGISTRY = "http://nexus-docker.nexus.svc.cluster.local:8083"
+        DOCKER_REGISTRY_NAME = "docker-local-registry/"
         DOCKER_IMAGE = "getting-started:1.0.0"
     }
     stages {
@@ -62,14 +63,11 @@ pipeline {
                         // Build the Docker image using your specific Dockerfile (Dockerfile.jvm)
                         sh "docker build -f src/main/docker/Dockerfile.toutou -t ${DOCKER_IMAGE} ."
                         // Authenticate with Nexus Docker registry
-                        withEnv(["DOCKER_OPTS=--insecure-registry nexus-docker.nexus:8083"]) {
-                            withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
-                                sh 'pwd'
-                                sh "echo $NEXUS_PASSWORD | docker login ${DOCKER_REGISTRY} -u $NEXUS_USERNAME --password-stdin"
-                                sh "docker tag ${DOCKER_IMAGE} ${DOCKER_REGISTRY}${DOCKER_IMAGE}"
-                                sh "docker push ${DOCKER_REGISTRY}${DOCKER_IMAGE}"
-                            }
-                        
+                        withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
+                            sh 'pwd'
+                            sh "echo $NEXUS_PASSWORD | docker login ${DOCKER_REGISTRY} -u $NEXUS_USERNAME --password-stdin"
+                            sh "docker tag ${DOCKER_IMAGE} ${DOCKER_REGISTRY_NAME}${DOCKER_IMAGE}"
+                            sh "docker push ${DOCKER_REGISTRY_NAME}${DOCKER_IMAGE}"
                         }
                     }
                 }
