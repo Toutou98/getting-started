@@ -29,8 +29,7 @@ pipeline {
     }
     environment {
         HELM_URL = "http://my-nexus-nexus-repository-manager.nexus:8081/repository/helm-local-repo/"
-        //HELM_URL = "http://host.docker.internal:8082/repository/helm-local-repo/"
-        DOCKER_REGISTRY = "http://host.docker.internal:8082/repository/docker-local-registry/"
+        DOCKER_REGISTRY = "http://nexus-docker.nexus:8083"
         DOCKER_IMAGE = "getting-started:1.0.0"
     }
     stages {
@@ -38,9 +37,6 @@ pipeline {
             steps {
                 container('maven') {
                     sh 'mvn package -Dquarkus.package.jar.type=uber-jar'
-                    sh 'pwd'
-                    sh 'ls -la'
-                    sh 'ls -la target/'
                 }
             }
         }
@@ -66,7 +62,7 @@ pipeline {
                         // Build the Docker image using your specific Dockerfile (Dockerfile.jvm)
                         sh "docker build -f src/main/docker/Dockerfile.toutou -t ${DOCKER_IMAGE} ."
                         // Authenticate with Nexus Docker registry
-                        withEnv(["DOCKER_OPTS=--insecure-registry host.docker.internal:8083"]) {
+                        withEnv(["DOCKER_OPTS=--insecure-registry nexus-docker.nexus:8083"]) {
                             withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
                                 sh 'pwd'
                                 sh "echo $NEXUS_PASSWORD | docker login ${DOCKER_REGISTRY} -u $NEXUS_USERNAME --password-stdin"
