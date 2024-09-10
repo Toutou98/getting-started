@@ -1,8 +1,8 @@
 replicaCount: 1
 
 image:
-  repository: http://localhost:8081/repository/docker-local/getting-started
-  tag: "1.0"
+  repository: http://nexus-docker.nexus.svc.cluster.local:8083/getting-started
+  tag: "1.0.0"
   pullPolicy: IfNotPresent
 
 service:
@@ -13,6 +13,16 @@ ingress:
   enabled: true
   hosts:
     - host: localhost
+
+serviceAccount:
+  create: true  
+  name: ""      
+
+autoscaling:
+  enabled: false  
+  minReplicas: 1  
+  maxReplicas: 5  
+  targetCPUUtilizationPercentage: 80  
 
 
 resources: {}
