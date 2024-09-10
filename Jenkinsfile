@@ -34,6 +34,13 @@ pipeline {
         DOCKER_IMAGE = "getting-started:1.0.0"
     }
     stages {
+        stage('Deploy dockker-local-registry service in k8s'){
+            steps {
+                script {
+                kubernetesDeploy(configs:"nexus-docker-service.yaml")
+                }
+            }
+        }
         stage('Build') {
             steps {
                 container('maven') {
@@ -62,6 +69,7 @@ pipeline {
                     script {
                         // Build the Docker image using your specific Dockerfile (Dockerfile.jvm)
                         sh "docker build -f src/main/docker/Dockerfile.toutou -t ${DOCKER_IMAGE} ."
+                        
                         // Authenticate with Nexus Docker registry
                         withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
                             sh 'pwd'
@@ -80,3 +88,14 @@ pipeline {
         }
     }
 }
+
+        // stage('Deploy Helm Chert'){
+        //     steps{
+        //         container('helm') {
+        //             helm repo add
+        //             withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
+        //                 sh 'curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD --upload-file quarkus-app-*.tgz $HELM_URL'
+        //             }
+        //         }
+        //     }
+        // }
