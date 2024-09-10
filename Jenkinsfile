@@ -37,7 +37,6 @@ pipeline {
         stage('Build') {
             steps {
                 container('maven') {
-                    kubernetesDeploy(configs:"nexus-docker-service.yaml")
                     sh 'mvn package -Dquarkus.package.jar.type=uber-jar'
                 }
             }
