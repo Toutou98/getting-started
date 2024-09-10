@@ -34,16 +34,10 @@ pipeline {
         DOCKER_IMAGE = "getting-started:1.0.0"
     }
     stages {
-        stage('Deploy dockker-local-registry service in k8s'){
-            steps {
-                script {
-                kubernetesDeploy(configs:"nexus-docker-service.yaml")
-                }
-            }
-        }
         stage('Build') {
             steps {
                 container('maven') {
+                    kubernetesDeploy(configs:"nexus-docker-service.yaml")
                     sh 'mvn package -Dquarkus.package.jar.type=uber-jar'
                 }
             }
