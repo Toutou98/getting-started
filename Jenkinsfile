@@ -75,7 +75,7 @@ pipeline {
             }
         }
         stage('Deploy Helm Chart') {
-            stage {
+            steps {
                 container('helm') {
                     script {
                         sh "helm repo add ${HELM_URL}"
