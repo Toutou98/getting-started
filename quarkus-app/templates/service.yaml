@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: {{ include "quarkus-app.fullname" . }}
   labels:
-    {{- include "quarkus-app.labels" . | nindent 4 }}
+    app: {{ include "quarkus-app.name" . }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -12,4 +12,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "quarkus-app.selectorLabels" . | nindent 4 }}
+    app: {{ include "quarkus-app.name" . }}
