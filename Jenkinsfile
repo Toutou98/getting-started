@@ -74,6 +74,17 @@ pipeline {
                 }
             }
         }
+        stage('Deploy Helm Chart') {
+            stage {
+                container('helm') {
+                    script {
+                        sh "helm repo add ${HELM_URL}"
+                        sh 'helm repo update'
+                        sh 'helm install quarkus-app helm-local/quarkus-app --namespace helm-apps'
+                    }
+                }
+            }
+        }
     }
     post {
         always {
@@ -81,14 +92,3 @@ pipeline {
         }
     }
 }
-
-        // stage('Deploy Helm Chert'){
-        //     steps{
-        //         container('helm') {
-        //             helm repo add
-        //             withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
-        //                 sh 'curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD --upload-file quarkus-app-*.tgz $HELM_URL'
-        //             }
-        //         }
-        //     }
-        // }
