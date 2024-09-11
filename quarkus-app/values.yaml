@@ -9,11 +9,6 @@ service:
   type: ClusterIP
   port: 8080
 
-ingress:
-  enabled: false
-  hosts:
-    - host: localhost
-
 serviceAccount: 
   name: "jenkins"      
 
