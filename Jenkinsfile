@@ -34,17 +34,6 @@ pipeline {
         DOCKER_IMAGE = "getting-started:1.0.0"
     }
     stages {
-        stage('Deploy Helm Chart') {
-            steps {
-                container('helm') {
-                    script {
-                        sh "helm repo add helm-local ${HELM_URL}"
-                        sh 'helm repo update'
-                        sh 'helm install quarkus-app helm-local/quarkus-app --namespace helm-apps'
-                    }
-                }
-            }
-        }
         stage('Build') {
             steps {
                 container('maven') {
@@ -63,6 +52,17 @@ pipeline {
                         {
                             sh 'curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD --upload-file quarkus-app-*.tgz $HELM_URL'
                         }
+                    }
+                }
+            }
+        }
+        stage('Deploy Helm Chart') {
+            steps {
+                container('helm') {
+                    script {
+                        sh "helm repo add helm-local ${HELM_URL}"
+                        sh 'helm repo update'
+                        sh 'helm install quarkus-app helm-local/quarkus-app --namespace helm-apps'
                     }
                 }
             }
