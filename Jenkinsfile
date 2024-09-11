@@ -80,7 +80,7 @@ pipeline {
                     script {
                         sh "helm repo add helm-local ${HELM_URL}"
                         sh 'helm repo update'
-                        sh 'helm install quarkus-app helm-local/quarkus-app --namespace helm-apps'
+                        sh 'helm install quarkus-app helm-local/quarkus-app'
                     }
                 }
             }
