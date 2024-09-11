@@ -16,7 +16,7 @@ ingress:
 
 serviceAccount:
   create: true  
-  name: ""      
+  name: "helm-serviceaccount"      
 
 autoscaling:
   enabled: false  
