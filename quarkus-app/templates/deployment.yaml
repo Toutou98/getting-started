@@ -32,4 +32,4 @@ spec:
             initialDelaySeconds: 15
             periodSeconds: 20
       imagePullSecrets:
-        - name: {{ .Values.image.pullSecrets | default "nexus-regcred" }}
+      - name: nexus-regcred
