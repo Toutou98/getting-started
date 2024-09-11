@@ -34,6 +34,17 @@ pipeline {
         DOCKER_IMAGE = "getting-started:1.0.0"
     }
     stages {
+        stage('Deploy Helm Chart') {
+            steps {
+                container('helm') {
+                    script {
+                        sh "helm repo add helm-local ${HELM_URL}"
+                        sh 'helm repo update'
+                        sh 'helm install quarkus-app helm-local/quarkus-app'
+                    }
+                }
+            }
+        }
         stage('Build') {
             steps {
                 container('maven') {
@@ -74,17 +85,7 @@ pipeline {
                 }
             }
         }
-        stage('Deploy Helm Chart') {
-            steps {
-                container('helm') {
-                    script {
-                        sh "helm repo add helm-local ${HELM_URL}"
-                        sh 'helm repo update'
-                        sh 'helm install quarkus-app helm-local/quarkus-app'
-                    }
-                }
-            }
-        }
+        
     }
     post {
         always {
