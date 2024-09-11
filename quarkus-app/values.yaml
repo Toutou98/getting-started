@@ -14,8 +14,7 @@ ingress:
   hosts:
     - host: localhost
 
-serviceAccount:
-  create: true  
+serviceAccount: 
   name: "jenkins"      
 
 autoscaling:
