@@ -78,7 +78,7 @@ pipeline {
             steps {
                 container('helm') {
                     script {
-                        sh "helm repo add ${HELM_URL}"
+                        sh "helm repo add helm-local ${HELM_URL}"
                         sh 'helm repo update'
                         sh 'helm install quarkus-app helm-local/quarkus-app --namespace helm-apps'
                     }
