@@ -34,13 +34,6 @@ pipeline {
         DOCKER_IMAGE = "getting-started:1.0.0"
     }
     stages {
-        stage('Build') {
-            steps {
-                container('maven') {
-                    sh 'mvn package -Dquarkus.package.jar.type=uber-jar'
-                }
-            }
-        }
         stage('Package Helm Chart') {
             steps {
                 container('helm') {
@@ -64,6 +57,13 @@ pipeline {
                         sh 'helm repo update'
                         sh 'helm install quarkus-app helm-local/quarkus-app --namespace helm-apps'
                     }
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                container('maven') {
+                    sh 'mvn package -Dquarkus.package.jar.type=uber-jar'
                 }
             }
         }

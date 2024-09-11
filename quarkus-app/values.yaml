@@ -12,11 +12,7 @@ service:
 ingress:
   enabled: true
   hosts:
-    - host: localhost
-
-serviceAccount:
-  create: true  
-  name: "helm-serviceaccount"      
+    - host: localhost    
 
 autoscaling:
   enabled: false  
