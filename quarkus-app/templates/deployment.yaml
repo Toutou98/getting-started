@@ -31,4 +31,5 @@ spec:
               port: 8080
             initialDelaySeconds: 15
             periodSeconds: 20
-      imagePullSecrets: []
+      imagePullSecrets:
+        - name: {{ .Values.image.pullSecrets | default "nexus-regcred" }}
