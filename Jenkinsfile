@@ -55,7 +55,6 @@ pipeline {
                     script {
                         sh "helm repo add helm-local ${HELM_URL}"
                         sh 'helm repo update'
-                        sh 'helm uninstall quarkus-app'
                         def releaseExists = sh(script: "helm list -q | grep -w 'quarkus-app'", returnStatus: true) == 0
                 
                         if (releaseExists) {
