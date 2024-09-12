@@ -16,7 +16,7 @@ ingress:
   hosts:
     - host: localhost
       paths:
-        - path: /hello
+        - path: /
           pathType: ImplementationSpecific
   tls: []
 
