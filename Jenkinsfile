@@ -34,6 +34,31 @@ pipeline {
         DOCKER_IMAGE = "getting-started:1.0.0"
     }
     stages {
+        stage('Build') {
+            steps {
+                container('maven') {
+                    sh 'mvn package -Dquarkus.package.jar.type=uber-jar'
+                }
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                container('docker') {
+                    script {
+                        // Build the Docker image using your specific Dockerfile (Dockerfile.jvm)
+                        sh "docker build -f src/main/docker/Dockerfile.toutou -t ${DOCKER_IMAGE} ."
+                        
+                        // Authenticate with Nexus Docker registry
+                        withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
+                            sh 'pwd'
+                            sh "echo $NEXUS_PASSWORD | docker login ${DOCKER_REGISTRY} -u $NEXUS_USERNAME --password-stdin"
+                            sh "docker tag ${DOCKER_IMAGE} ${DOCKER_REGISTRY_DOMAIN}/${DOCKER_IMAGE}"
+                            sh "docker push ${DOCKER_REGISTRY_DOMAIN}/${DOCKER_IMAGE}"
+                        }
+                    }
+                }
+            }
+        }
         stage('Package Helm Chart') {
             steps {
                 container('helm') {
@@ -60,32 +85,6 @@ pipeline {
                 }
             }
         }
-        stage('Build') {
-            steps {
-                container('maven') {
-                    sh 'mvn package -Dquarkus.package.jar.type=uber-jar'
-                }
-            }
-        }
-        stage('Build Docker Image') {
-            steps {
-                container('docker') {
-                    script {
-                        // Build the Docker image using your specific Dockerfile (Dockerfile.jvm)
-                        sh "docker build -f src/main/docker/Dockerfile.toutou -t ${DOCKER_IMAGE} ."
-                        
-                        // Authenticate with Nexus Docker registry
-                        withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
-                            sh 'pwd'
-                            sh "echo $NEXUS_PASSWORD | docker login ${DOCKER_REGISTRY} -u $NEXUS_USERNAME --password-stdin"
-                            sh "docker tag ${DOCKER_IMAGE} ${DOCKER_REGISTRY_DOMAIN}/${DOCKER_IMAGE}"
-                            sh "docker push ${DOCKER_REGISTRY_DOMAIN}/${DOCKER_IMAGE}"
-                        }
-                    }
-                }
-            }
-        }
-        
     }
     post {
         always {
