@@ -20,7 +20,7 @@ spec:
             pathType: {{ .pathType }} 
             backend:
               service:
-                name: {{ include "quarkus-app.fullname" . }}  
+                name: quarkus-app 
                 port:
                   number: {{ .Values.service.port }}
           {{- end }}
