@@ -80,7 +80,17 @@ pipeline {
                     script {
                         sh "helm repo add helm-local ${HELM_URL}"
                         sh 'helm repo update'
-                        sh 'helm install quarkus-app helm-local/quarkus-app'
+                        def releaseExists = sh(script: "helm list -q | grep -w 'quarkus-app'", returnStatus: true) == 0
+                
+                        if (releaseExists) {
+                            // Upgrade the release if it already exists
+                            echo 'Release already exists. Upgrading...'
+                            sh 'helm upgrade quarkus-app helm-local/quarkus-app'
+                        } else {
+                            // Install the release if it does not exist
+                            echo 'Release does not exist. Installing...'
+                            sh 'helm install quarkus-app helm-local/quarkus-app'
+                        }
                     }
                 }
             }
