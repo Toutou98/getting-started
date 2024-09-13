@@ -1,3 +1,5 @@
+@Library('jenkins-shared') _ 
+
 pipeline {
     agent {
         kubernetes {
