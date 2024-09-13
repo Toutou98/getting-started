@@ -26,6 +26,10 @@ pipeline {
                 command:
                 - cat
                 tty: true
+              - name kubehelm
+                image: nexus-docker.nexus.svc.cluster.local:8083/kubehelm:1.0.0
+                command:
+                - cat
             """
         }
     }
@@ -36,6 +40,13 @@ pipeline {
         DOCKER_IMAGE = "getting-started:1.0.0"
     }
     stages {
+        stage('testaki') {
+            steps {
+                container('kubehelm') {
+                    
+                }
+            }
+        }
         stage('Build') {
             steps {
                 container('maven') {
