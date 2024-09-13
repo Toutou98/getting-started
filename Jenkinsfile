@@ -56,9 +56,11 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                script {
-                    sh "docker pull nexus-docker.nexus.svc.cluster.local:8083/jdk-base-image:1.0.0"
-                    dockerActions.buildDockerImage('src/main/docker/Dockerfile.toutou', env.DOCKER_IMAGE, env.DOCKER_REGISTRY_DOMAIN)
+                container('docker') {
+                    script {
+                        sh "docker pull nexus-docker.nexus.svc.cluster.local:8083/jdk-base-image:1.0.0"
+                        dockerActions.buildDockerImage('src/main/docker/Dockerfile.toutou', env.DOCKER_IMAGE, env.DOCKER_REGISTRY_DOMAIN)
+                    }
                 }
             }
         }
