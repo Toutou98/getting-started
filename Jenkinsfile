@@ -46,6 +46,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
+                    docker build -f Dockerfile.toutou -t ${DOCKER_IMAGE_NAME}
                     dockerActions.buildDockerImage('src/main/docker/Dockerfile.toutou', env.DOCKER_IMAGE, env.DOCKER_REGISTRY_DOMAIN)
                 }
             }
