@@ -27,7 +27,7 @@ pipeline {
                 - cat
                 tty: true
               - name kubehelm
-                image: nexus-docker.nexus.svc.cluster.local:8083/kubehelm:1.0.0
+                image: 10.108.168.228:8083/kubehelm:1.0.0
                 command:
                 - cat
                 tty: true
