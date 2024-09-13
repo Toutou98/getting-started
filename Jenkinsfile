@@ -45,9 +45,11 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                script {
-                    sh "docker build -f src/main/docker/Dockerfile.toutou -t ${DOCKER_IMAGE} ."
-                    dockerActions.buildDockerImage(env.DOCKER_IMAGE, env.DOCKER_REGISTRY_DOMAIN)
+                container('docker')    
+                    script {
+                        sh "docker build -f src/main/docker/Dockerfile.toutou -t ${DOCKER_IMAGE} ."
+                        dockerActions.buildDockerImage(env.DOCKER_IMAGE, env.DOCKER_REGISTRY_DOMAIN)
+                    }
                 }
             }
         }
