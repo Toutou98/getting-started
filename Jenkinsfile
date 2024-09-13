@@ -40,7 +40,7 @@ pipeline {
             steps {
                 container('docker') {
                     withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
-                        sh "echo $NEXUS_PASSWORD | docker login ${registryDomain} -u ${NEXUS_USERNAME} --password-stdin"
+                        sh "echo $NEXUS_PASSWORD | docker login ${DOCKER_REGISTRY_DOMAIN} -u ${NEXUS_USERNAME} --password-stdin"
                     }
                 }
             }
