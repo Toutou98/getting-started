@@ -61,7 +61,7 @@ pipeline {
             steps {
                 script {
                     helmSteps.deployChart('quarkus-app', env.HELM_URL)
-                |
+                }
             }
         }
         // stage('Build') {
