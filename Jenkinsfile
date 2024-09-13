@@ -21,11 +21,6 @@ pipeline {
                 - --insecure-registry=nexus-docker.nexus.svc.cluster.local:8083
                 securityContext:
                   privileged: true
-              - name: helm
-                image: alpine/helm:3.15.4
-                command:
-                - cat
-                tty: true
               - name: kubehelm
                 image: 10.108.168.228:8083/kubehelm:1.0.0
                 command:
@@ -41,13 +36,6 @@ pipeline {
         DOCKER_IMAGE = "getting-started:1.0.0"
     }
     stages {
-        stage('testaki') {
-            steps {
-                container('kubehelm') {
-                    sh 'kubectl --help'
-                }
-            }
-        }
         stage('Build') {
             steps {
                 container('maven') {
@@ -67,15 +55,19 @@ pipeline {
         }
         stage('Package Helm Chart') {
             steps {
-                script {
-                    helmActions.packageChart('quarkus-app', env.HELM_URL)
+                container('kubehelm') {
+                    script {
+                        helmActions.packageChart('quarkus-app', env.HELM_URL)
+                    }
                 }
             }
         }
         stage('Deploy Helm Chart') {
             steps {
-                script {
-                    helmActions.deployChart('quarkus-app', env.HELM_URL)
+                container('kubehlm') {
+                    script {
+                        helmActions.deployChart('quarkus-app', env.HELM_URL)
+                    }
                 }
             }
         }
