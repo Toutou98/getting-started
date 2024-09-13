@@ -1,6 +1,9 @@
-FROM nexus-docker.nexus.svc.cluster.local:8083/jdk-base-image:1.0.0
+FROM registry.access.redhat.com/ubi8/openjdk-21:1.20
+
+ENV LANGUAGE='en_US:en'
 
 COPY --chown=185 target/*.jar /deployments/
 
 EXPOSE 8080
+USER 185
 

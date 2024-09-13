@@ -36,16 +36,16 @@ pipeline {
         DOCKER_IMAGE = "getting-started:1.0.0"
     }
     stages {
-        stage('testaki') {
-            steps {
-                container('docker') {
-                    withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
-                        sh "echo $NEXUS_PASSWORD | docker login ${DOCKER_REGISTRY_DOMAIN} -u ${NEXUS_USERNAME} --password-stdin"
-                        sh "docker build -f src/main/docker/Dockerfile.toutou -t ${DOCKER_IMAGE} ."
-                    }
-                }
-            }
-        }
+        // stage('testaki') {
+        //     steps {
+        //         container('docker') {
+        //             withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
+        //                 sh "echo $NEXUS_PASSWORD | docker login ${DOCKER_REGISTRY_DOMAIN} -u ${NEXUS_USERNAME} --password-stdin"
+        //                 sh "docker build -f src/main/docker/Dockerfile.toutou -t ${DOCKER_IMAGE} ."
+        //             }
+        //         }
+        //     }
+        // }
         stage('Build') {
             steps {
                 container('maven') {
