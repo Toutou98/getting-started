@@ -67,6 +67,8 @@ pipeline {
                 container('kubehlm') {
                     script {
                         helmActions.deployChart('quarkus-app', env.HELM_URL)
+                        sh "kubectl --help"
+                        sh "kubectl get pods"
                     }
                 }
             }
