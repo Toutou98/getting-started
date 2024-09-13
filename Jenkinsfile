@@ -64,7 +64,7 @@ pipeline {
         }
         stage('Deploy Helm Chart') {
             steps {
-                container('kubehlm') {
+                container('kubehelm') {
                     script {
                         helmActions.deployChart('quarkus-app', env.HELM_URL)
                         sh "kubectl --help"
