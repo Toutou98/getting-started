@@ -44,7 +44,7 @@ pipeline {
         stage('testaki') {
             steps {
                 container('kubehelm') {
-
+                    sh 'kubectl --help'
                 }
             }
         }
