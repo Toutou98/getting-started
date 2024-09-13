@@ -1,4 +1,4 @@
-FROM http://10.108.168.228:8083/jdk-base-image:1.0.0
+FROM 10.108.168.228:8083/jdk-base-image:1.0.0
 
 COPY --chown=185 target/*.jar /deployments/
 
