@@ -30,6 +30,7 @@ pipeline {
                 image: nexus-docker.nexus.svc.cluster.local:8083/kubehelm:1.0.0
                 command:
                 - cat
+                tty: true
             """
         }
     }
@@ -43,7 +44,7 @@ pipeline {
         stage('testaki') {
             steps {
                 container('kubehelm') {
-                    
+
                 }
             }
         }
