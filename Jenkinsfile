@@ -36,9 +36,12 @@ pipeline {
         DOCKER_IMAGE = "getting-started:1.0.0"
     }
     stages {
-        steps('testaki') {
-            container('docker') {
-                sh 'curl -v nexus-docker.nexus.svc.cluster.local:8083/v2'
+        stage('testaki') {
+            steps {
+                container('docker') {
+                    
+                    sh 'curl -v nexus-docker.nexus.svc.cluster.local:8083/v2'
+                }
             }
         }
         stage('Build') {
