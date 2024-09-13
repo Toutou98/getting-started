@@ -46,21 +46,21 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    dockerSteps.buildDockerImage('src/main/docker/Dockerfile.toutou', env.DOCKER_IMAGE, env.DOCKER_REGISTRY_DOMAIN)
+                    dockerActions.buildDockerImage('src/main/docker/Dockerfile.toutou', env.DOCKER_IMAGE, env.DOCKER_REGISTRY_DOMAIN)
                 }
             }
         }
         stage('Package Helm Chart') {
             steps {
                 script {
-                    helmSteps.packageChart('quarkus-app', env.HELM_URL)
+                    helmActions.packageChart('quarkus-app', env.HELM_URL)
                 }
             }
         }
         stage('Deploy Helm Chart') {
             steps {
                 script {
-                    helmSteps.deployChart('quarkus-app', env.HELM_URL)
+                    helmActions.deployChart('quarkus-app', env.HELM_URL)
                 }
             }
         }
