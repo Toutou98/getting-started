@@ -26,7 +26,7 @@ pipeline {
                 command:
                 - cat
                 tty: true
-              - name kubehelm
+              - name: kubehelm
                 image: 10.108.168.228:8083/kubehelm:1.0.0
                 command:
                 - cat
