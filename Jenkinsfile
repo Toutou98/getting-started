@@ -39,8 +39,9 @@ pipeline {
         stage('testaki') {
             steps {
                 container('docker') {
-                    
-                    sh 'curl -v nexus-docker.nexus.svc.cluster.local:8083/v2'
+                    withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
+                        sh "echo $NEXUS_PASSWORD | docker login ${registryDomain} -u ${NEXUS_USERNAME} --password-stdin"
+                    }
                 }
             }
         }
