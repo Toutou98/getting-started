@@ -1,3 +1,5 @@
 @Library("jenkins-shared@main") _ 
 
-myPipeline.runPipeline()
+script {
+    myPipeline.runPipeline()
+}
